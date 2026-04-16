@@ -9,8 +9,8 @@ import {
   Edge,
   MarkerType,
 } from 'reactflow';
-import { Sidebar } from '@/widgets/sidebar/ui/Sidebar';
-import { DecisionGraph } from '@/widgets/decision-graph/ui/DecisionGraph';
+import { Sidebar } from '@/layout/Sidebar';
+import { DecisionGraph } from '@/widgets/DecisionGraph';
 import { api, type AnalysisResult } from '@/shared/api';
 
 export const HomePage = () => {

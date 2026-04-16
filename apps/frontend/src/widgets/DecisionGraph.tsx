@@ -4,14 +4,13 @@ import React, { useMemo } from 'react';
 import ReactFlow, { 
   Background, 
   Controls, 
-  MiniMap, 
   NodeChange,
   EdgeChange,
   Connection,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { ParticipantNode } from '@/entities/participant/ui/ParticipantNode';
-import { DecisionNode } from '@/entities/decision/ui/DecisionNode';
+import { ParticipantNode } from '@/components/nodes/ParticipantNode';
+import { DecisionNode } from '@/components/nodes/DecisionNode';
 
 interface DecisionGraphProps {
   nodes: any[];
@@ -56,15 +55,6 @@ export const DecisionGraph = ({
       >
         <Background color="#1e293b" gap={20} />
         <Controls className="bg-slate-800 border-slate-700 fill-slate-200" />
-        <MiniMap 
-          nodeColor={(n) => {
-            if (n.type === 'participant') return '#0ea5e9';
-            if (n.type === 'decision') return '#f59e0b';
-            return (n.style?.background as string) || '#334155';
-          }} 
-          maskColor="rgba(15, 23, 42, 0.7)"
-          className="bg-slate-900 border-slate-800"
-        />
       </ReactFlow>
       
       {/* Summary badge */}

@@ -1,0 +1,29 @@
+{
+  "name": "@synapse/ui",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "embla-carousel-react": "^8.6.0",
+    "react-dropzone": "^14.4.1",
+    "react-icons": "^4.10.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0 || ^19.0.0",
+    "@types/react-dom": "^18.0.0 || ^19.0.0",
+    "@types/react-dropzone": "^5.1.0",
+    "material-symbols": "^0.34.0",
+    "next": "^16.2.3",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-icons": "^4.10.1",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "next": "^13.0.0 || ^14.0.0 || ^15.0.0",
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  }
+}

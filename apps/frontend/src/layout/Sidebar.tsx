@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Network, Info, FileText, Users } from 'lucide-react';
-import { UploadTranscriptForm } from '@/features/upload-transcript/ui/UploadTranscriptForm';
+import { UploadTranscriptForm } from '@/components/UploadTranscriptForm';
 
 interface SidebarProps {
   selectedNode: any;
@@ -62,7 +62,7 @@ export const Sidebar = ({
       <div className="flex items-center gap-2 mb-2">
         <Network className="text-sky-400 w-8 h-8" />
         <h1 className="text-xl font-bold bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">
-          DecisionTracker AI
+          Synapse AI
         </h1>
       </div>
 

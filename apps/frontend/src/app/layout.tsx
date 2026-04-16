@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DecisionTracker AI",
+  title: "Synapse AI",
   description: "Upload meeting transcripts and extract decisions, participants, and relationships with AI.",
 };
 

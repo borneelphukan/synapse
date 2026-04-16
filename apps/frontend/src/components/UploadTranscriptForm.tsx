@@ -23,12 +23,40 @@ export const UploadTranscriptForm = ({
     if (!file) return;
 
     setFileName(file.name);
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const text = event.target?.result as string;
-      setTranscriptText(text);
-    };
-    reader.readAsText(file);
+    
+    // Check file type
+    const isTextFile = file.name.match(/\.(txt|vtt|srt|csv|md)$/i) || 
+                      file.type.startsWith('text/') || 
+                      file.type === '';
+    
+    const isDocx = file.name.endsWith('.docx') || 
+                  file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+    if (isTextFile) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const text = event.target?.result as string;
+        setTranscriptText(text);
+      };
+      reader.readAsText(file);
+    } else if (isDocx) {
+      // Handle Word Documents (.docx)
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        const arrayBuffer = event.target?.result as ArrayBuffer;
+        try {
+          const mammoth = await import('mammoth');
+          const result = await mammoth.extractRawText({ arrayBuffer });
+          setTranscriptText(result.value);
+        } catch (err) {
+          console.error('Error extracting Word document:', err);
+          setTranscriptText(`Failed to extract text from Word document: ${file.name}. Please ensure it is a valid .docx file.`);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    } else {
+      setTranscriptText(`[File: ${file.name}] - This file format is not yet supported for automatic extraction. Please paste the text manually or use a .txt/.docx file.`);
+    }
   };
 
   const handleSubmit = () => {
@@ -83,8 +111,8 @@ export const UploadTranscriptForm = ({
                 <span className="text-sky-400 font-semibold">{fileName}</span>
               ) : (
                 <>
-                  Click to upload <span className="text-slate-400">.txt</span> or{' '}
-                  <span className="text-slate-400">.vtt</span> file
+                  Click to upload <span className="text-slate-400">.docx</span> or{' '}
+                  <span className="text-slate-400">.pdf</span> file
                 </>
               )}
             </p>
@@ -111,11 +139,13 @@ export const UploadTranscriptForm = ({
               setTranscriptText(e.target.value);
               setFileName(null);
             }}
-            placeholder={`Paste your meeting transcript here...\n\nExample format:\nJohn: I think we should go with option A.\nSarah: I agree, let's proceed with that.\nJohn: Great, that's decided then.`}
-            className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-sky-500 transition-colors resize-none"
+            placeholder={`Paste your meeting transcript here...`}
+            className={`w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-sky-500 transition-colors resize-none ${
+              !!fileName ? 'opacity-50 cursor-not-allowed border-dashed' : ''
+            }`}
             style={{ scrollbarWidth: 'thin', scrollbarColor: '#334155 transparent' }}
             rows={6}
-            disabled={status === 'analyzing'}
+            disabled={status === 'analyzing' || !!fileName}
           />
 
           {/* Line count indicator */}
