@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id          String     @id @default(uuid())
+  name        String
+  description String?
+  decisions   Decision[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Person {
+  id             String                   @id @default(uuid())
+  email          String                   @unique
+  name           String
+  avatarUrl      String?
+  responsibilities DecisionResponsibility[]
+  createdAt      DateTime                 @default(now())
+  updatedAt      DateTime                 @updatedAt
+}
+
+model Decision {
+  id               String                   @id @default(uuid())
+  content          String
+  rationale        String?
+  status           DecisionStatus           @default(PROPOSED)
+  projectId        String
+  project          Project                  @relation(fields: [projectId], references: [id])
+  responsibilities DecisionResponsibility[]
+  sourceId         String?
+  source           Source?                  @relation(fields: [sourceId], references: [id])
+  
+  // Graph relationships
+  outgoingEdges    DecisionEdge[]           @relation("FromDecision")
+  incomingEdges    DecisionEdge[]           @relation("ToDecision")
+
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+}
+
+enum DecisionStatus {
+  PROPOSED
+  FINALIZED
+  REJECTED
+  DEPRECATED
+}
+
+model DecisionResponsibility {
+  id         String           @id @default(uuid())
+  decisionId String
+  personId   String
+  role       ResponsibilityRole
+  decision   Decision         @relation(fields: [decisionId], references: [id])
+  person     Person           @relation(fields: [personId], references: [id])
+
+  @@unique([decisionId, personId, role])
+}
+
+enum ResponsibilityRole {
+  PROPOSER
+  APPROVER
+  STAKEHOLDER
+  EXECUTOR
+}
+
+model DecisionEdge {
+  id             String   @id @default(uuid())
+  fromDecisionId String
+  toDecisionId   String
+  type           EdgeType
+  fromDecision   Decision @relation("FromDecision", fields: [fromDecisionId], references: [id])
+  toDecision     Decision @relation("ToDecision", fields: [toDecisionId], references: [id])
+
+  @@unique([fromDecisionId, toDecisionId, type])
+}
+
+enum EdgeType {
+  DEPENDS_ON
+  RELATES_TO
+  REFINES
+  BLOCKS
+}
+
+model Source {
+  id          String     @id @default(uuid())
+  type        SourceType
+  externalId  String     // Slack thread TS, Zoom meeting UUID, etc.
+  url         String?
+  rawContent  String?    @db.Text
+  decisions   Decision[]
+  createdAt   DateTime   @default(now())
+}
+
+enum SourceType {
+  GOOGLE_MEET
+}
