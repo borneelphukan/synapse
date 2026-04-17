@@ -1,7 +1,21 @@
 'use client';
 
-import { LoginPage } from '@/pages/LoginPage';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
+import { HomePage } from '@/views';
 
-export default function Home() {
-  return <LoginPage />;
+export default function RootPage() {
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace('/login');
+    }
+  }, [isAuthenticated, router]);
+
+  if (!isAuthenticated) return null;
+  
+  return <HomePage />;
 }

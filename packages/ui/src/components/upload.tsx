@@ -31,7 +31,7 @@ const Upload = ({
     : 0;
 
   return (
-    <div className={`bg-slate-800/50 rounded-2xl p-4 border border-slate-700/50 ${className}`}>
+    <div className={`${className}`}>
       {status === 'done' ? (
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold">
@@ -50,14 +50,16 @@ const Upload = ({
           </button>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {/* File upload area */}
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="border-2 border-dashed border-slate-700 hover:border-sky-500/50 rounded-xl p-4 cursor-pointer transition-colors group text-center"
+            className="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-sky-500 dark:hover:border-sky-500 hover:bg-sky-500/5 dark:hover:bg-sky-500/10 rounded-2xl p-8 cursor-pointer transition-all group text-center bg-slate-50/50 dark:bg-slate-800/20"
           >
-            <Icon type="upload" className="!text-[20px] mx-auto mb-2 text-slate-500 group-hover:text-sky-400 transition-colors" />
-            <p className="text-[10px] text-slate-500 group-hover:text-slate-400 transition-colors">
+            <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300">
+              <Icon type="upload" className="!text-[24px] text-slate-400 dark:text-slate-500 group-hover:text-sky-500 transition-colors hover:cursor-pointer" />
+            </div>
+            <p className="text-xs text-slate-500 group-hover:text-slate-700 dark:group-hover:text-slate-300 transition-colors">
               {fileName ? (
                 <span className="text-sky-400 font-semibold">{fileName}</span>
               ) : (

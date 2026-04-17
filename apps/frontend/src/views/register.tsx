@@ -9,7 +9,7 @@ import { useAuth } from '@/context/AuthContext';
 
 export const RegisterPage = () => {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -20,6 +20,10 @@ export const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  React.useEffect(() => {
+    if (isAuthenticated) router.replace('/');
+  }, [isAuthenticated, router]);
 
   const update = (field: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm(prev => ({ ...prev, [field]: e.target.value }));
@@ -41,7 +45,7 @@ export const RegisterPage = () => {
         company: form.company || undefined,
       });
       login(access_token);
-      router.push('/home');
+      router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
     } finally {
@@ -153,7 +157,7 @@ export const RegisterPage = () => {
                 Company <span className="text-slate-600">(optional)</span>
               </label>
               <div className="relative">
-                <Icon type="business" className="!text-[18px] absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 pointer-events-none" />
+                <Icon type={"business" as any} className="!text-[18px] absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 pointer-events-none" />
                 <input
                   id="company"
                   type="text"
@@ -183,7 +187,7 @@ export const RegisterPage = () => {
           <div className="mt-6 pt-6 border-t border-slate-800 text-center">
             <p className="text-slate-500 text-sm">
               Already have an account?{' '}
-              <Link href="/" className="text-sky-400 hover:text-sky-300 font-semibold transition-colors">
+              <Link href="/login" className="text-sky-400 hover:text-sky-300 font-semibold transition-colors">
                 Sign in
               </Link>
             </p>

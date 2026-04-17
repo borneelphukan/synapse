@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = useCallback(() => {
     localStorage.removeItem('synapse_token');
     setToken(null);
-    router.push('/');
+    router.push('/login');
   }, [router]);
 
   if (!mounted) return null;

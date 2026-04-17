@@ -66,4 +66,11 @@ export const api = {
     password: string;
   }): Promise<{ message: string }> =>
     request('/auth/reset-password', { method: 'POST', body: JSON.stringify(data) }),
+
+  getMe: async (): Promise<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    company?: string;
+  }> => request('/auth/me'),
 };

@@ -69,7 +69,7 @@ export const ResetPasswordPage = () => {
               <h2 className="text-lg font-semibold text-slate-100">Password updated!</h2>
               <p className="text-slate-500 text-sm">Your password has been successfully reset. You can now sign in with your new password.</p>
               <button
-                onClick={() => router.push('/')}
+                onClick={() => router.push('/login')}
                 className="inline-flex items-center gap-2 text-sm font-bold text-white py-3 px-6 rounded-xl transition-all"
                 style={{ background: 'linear-gradient(135deg, #0ea5e9, #6366f1)' }}
               >
@@ -149,7 +149,7 @@ export const ResetPasswordPage = () => {
               </button>
 
               <div className="text-center">
-                <Link href="/" className="inline-flex items-center gap-1.5 text-slate-500 hover:text-slate-400 text-sm transition-colors">
+                <Link href="/login" className="inline-flex items-center gap-1.5 text-slate-500 hover:text-slate-400 text-sm transition-colors">
                   <Icon type="arrow_back" className="!text-[14px]" /> Back to sign in
                 </Link>
               </div>

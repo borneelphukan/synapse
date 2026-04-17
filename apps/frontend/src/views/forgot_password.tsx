@@ -52,7 +52,7 @@ export const ForgotPasswordPage = () => {
                 If an account exists for <strong className="text-slate-300">{email}</strong>, a password reset link has been sent. It expires in 1 hour.
               </p>
               <Link
-                href="/"
+                href="/login"
                 className="inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 text-sm font-semibold transition-colors mt-4"
               >
                 <Icon type="arrow_back" className="!text-[16px]" /> Back to sign in
@@ -98,7 +98,7 @@ export const ForgotPasswordPage = () => {
               </button>
 
               <div className="text-center">
-                <Link href="/" className="inline-flex items-center gap-1.5 text-slate-500 hover:text-slate-400 text-sm transition-colors">
+                <Link href="/login" className="inline-flex items-center gap-1.5 text-slate-500 hover:text-slate-400 text-sm transition-colors">
                   <Icon type="arrow_back" className="!text-[14px]" /> Back to sign in
                 </Link>
               </div>
