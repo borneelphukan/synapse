@@ -10,21 +10,60 @@ export interface AnalysisResult {
   transcript: string[];
 }
 
+function getToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('synapse_token');
+}
+
+async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const token = getToken();
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(options.headers as Record<string, string>),
+  };
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
+  const response = await fetch(`${BASE_URL}${path}`, { ...options, headers });
+
+  if (!response.ok) {
+    let errorMessage = 'Request failed';
+    try {
+      const body = await response.json();
+      errorMessage = body.message || errorMessage;
+    } catch {}
+    throw new Error(errorMessage);
+  }
+  return response.json();
+}
+
 export const api = {
-  analyzeTranscript: async (transcript: string): Promise<AnalysisResult> => {
-    const response = await fetch(`${BASE_URL}/ingestion/transcript/analyze`, {
+  analyzeTranscript: async (transcript: string): Promise<AnalysisResult> =>
+    request('/ingestion/transcript/analyze', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ transcript }),
-    });
-    if (!response.ok) {
-      let errorMessage = 'Failed to analyze transcript';
-      try {
-        const errorBody = await response.json();
-        errorMessage = errorBody.message || errorMessage;
-      } catch {}
-      throw new Error(errorMessage);
-    }
-    return response.json();
-  },
+    }),
+
+  register: async (data: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    company?: string;
+  }): Promise<{ access_token: string }> =>
+    request('/auth/register', { method: 'POST', body: JSON.stringify(data) }),
+
+  login: async (data: {
+    email: string;
+    password: string;
+  }): Promise<{ access_token: string }> =>
+    request('/auth/login', { method: 'POST', body: JSON.stringify(data) }),
+
+  forgotPassword: async (email: string): Promise<{ message: string }> =>
+    request('/auth/forgot-password', { method: 'POST', body: JSON.stringify({ email }) }),
+
+  resetPassword: async (data: {
+    token: string;
+    password: string;
+  }): Promise<{ message: string }> =>
+    request('/auth/reset-password', { method: 'POST', body: JSON.stringify(data) }),
 };

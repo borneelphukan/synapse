@@ -6,11 +6,13 @@ import { PrismaModule } from './prisma/prisma.module';
 import { DecisionModule } from './decision/decision.module';
 import { ExtractionModule } from './extraction/extraction.module';
 import { IngestionModule } from './ingestion/ingestion.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
+    AuthModule,
     DecisionModule,
     ExtractionModule,
     IngestionModule,

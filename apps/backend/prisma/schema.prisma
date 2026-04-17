@@ -10,6 +10,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id                  String               @id @default(uuid())
+  firstName           String
+  lastName            String
+  email               String               @unique
+  passwordHash        String
+  company             String?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  passwordResetTokens PasswordResetToken[]
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
 model Project {
   id          String     @id @default(uuid())
   name        String
@@ -20,13 +42,13 @@ model Project {
 }
 
 model Person {
-  id             String                   @id @default(uuid())
-  email          String                   @unique
-  name           String
-  avatarUrl      String?
+  id               String                   @id @default(uuid())
+  email            String                   @unique
+  name             String
+  avatarUrl        String?
   responsibilities DecisionResponsibility[]
-  createdAt      DateTime                 @default(now())
-  updatedAt      DateTime                 @updatedAt
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
 }
 
 model Decision {
@@ -39,8 +61,7 @@ model Decision {
   responsibilities DecisionResponsibility[]
   sourceId         String?
   source           Source?                  @relation(fields: [sourceId], references: [id])
-  
-  // Graph relationships
+
   outgoingEdges    DecisionEdge[]           @relation("FromDecision")
   incomingEdges    DecisionEdge[]           @relation("ToDecision")
 
@@ -56,12 +77,12 @@ enum DecisionStatus {
 }
 
 model DecisionResponsibility {
-  id         String           @id @default(uuid())
+  id         String             @id @default(uuid())
   decisionId String
   personId   String
   role       ResponsibilityRole
-  decision   Decision         @relation(fields: [decisionId], references: [id])
-  person     Person           @relation(fields: [personId], references: [id])
+  decision   Decision           @relation(fields: [decisionId], references: [id])
+  person     Person             @relation(fields: [personId], references: [id])
 
   @@unique([decisionId, personId, role])
 }
@@ -92,13 +113,13 @@ enum EdgeType {
 }
 
 model Source {
-  id          String     @id @default(uuid())
-  type        SourceType
-  externalId  String     // Slack thread TS, Zoom meeting UUID, etc.
-  url         String?
-  rawContent  String?    @db.Text
-  decisions   Decision[]
-  createdAt   DateTime   @default(now())
+  id         String     @id @default(uuid())
+  type       SourceType
+  externalId String
+  url        String?
+  rawContent String?    @db.Text
+  decisions  Decision[]
+  createdAt  DateTime   @default(now())
 }
 
 enum SourceType {
