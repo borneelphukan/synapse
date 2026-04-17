@@ -1,17 +1,6 @@
 import * as React from "react";
+import { Icon } from './icon';
 
-// Simple spinner component
-const Spinner = ({ className = "" }: { className?: string }) => (
-  <svg 
-    className={`animate-spin h-4 w-4 ${className}`} 
-    xmlns="http://www.w3.org/2000/svg" 
-    fill="none" 
-    viewBox="0 0 24 24"
-  >
-    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-  </svg>
-);
 
 export type ButtonVariant = 'primary' | 'success' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
 export type ButtonSize = 'md' | 'sm' | 'lg' | 'icon';
@@ -50,13 +39,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
   const isIconOnly = size === "icon" || (!hasContent && !!(icon?.left || icon?.right));
 
   const variantClasses: Record<ButtonVariant, string> = {
-    primary: "text-white bg-orange-500 hover:bg-orange-600",
-    success: "text-white bg-green-500 hover:bg-green-600",
-    destructive: "text-white bg-red-200 hover:bg-red-600",
-    outline: "text-gray-100 border border-gray-400",
-    secondary: "text-white bg-gray-500 hover:bg-gray-400",
-    ghost: "text-gray-100 hover:bg-gray-400/10",
-    link: "text-orange-500 p-0 rounded-none hover:underline",
+    primary: "text-white bg-sky-500 hover:bg-sky-600 shadow-lg shadow-sky-500/20 disabled:bg-slate-700 disabled:text-slate-500 disabled:shadow-none",
+    success: "text-white bg-emerald-500 hover:bg-emerald-600",
+    destructive: "text-white bg-red-500 hover:bg-red-600",
+    outline: "text-slate-200 border border-slate-700 hover:border-sky-500/50",
+    secondary: "text-slate-200 bg-slate-800 hover:bg-slate-700",
+    ghost: "text-slate-300 hover:bg-slate-800",
+    link: "text-sky-400 p-0 rounded-none hover:underline",
   };
 
   const sizeClasses: Record<ButtonSize, string> = {
@@ -67,11 +56,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
   };
 
   const shapeClasses: Record<ButtonShape, string> = {
-    default: "rounded-xl",
+    default: "rounded-lg",
     circle: "rounded-full",
   };
 
-  const baseClasses = "relative inline-flex items-center justify-center gap-2 h-fit whitespace-nowrap text-base font-medium transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 shrink-0 cursor-pointer ease-out";
+  const baseClasses = "relative inline-flex items-center justify-center gap-2 h-fit whitespace-nowrap text-xs font-bold transition-all duration-200 disabled:cursor-not-allowed outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 shrink-0 cursor-pointer ease-out";
 
   const combinedClassName = `
     ${baseClasses}
@@ -112,7 +101,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
       {content}
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <Spinner />
+          <Icon type="sync" className="animate-spin !text-[14px]" />
         </div>
       )}
     </button>

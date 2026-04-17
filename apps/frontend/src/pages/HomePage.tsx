@@ -8,8 +8,10 @@ import {
   Connection,
   Edge,
   MarkerType,
+  ReactFlowProvider,
 } from 'reactflow';
 import { Sidebar } from '@/layout/Sidebar';
+import { Navbar } from '@/components/Navbar';
 import { DecisionGraph } from '@/widgets/DecisionGraph';
 import { api, type AnalysisResult } from '@/shared/api';
 
@@ -22,14 +24,13 @@ export const HomePage = () => {
   const [participants, setParticipants] = useState<string[]>([]);
   const [decisionCount, setDecisionCount] = useState(0);
 
-  const arrangeParticipantsCircularly = (count: number, index: number) => {
-    const centerX = 400;
-    const centerY = 200;
-    const radius = 180 + Math.max(0, count - 4) * 30;
-    const angle = (2 * Math.PI * index) / count - Math.PI / 2;
+  const arrangeParticipantsInRow = (count: number, index: number) => {
+    const spacing = 180;
+    const totalWidth = (count - 1) * spacing;
+    const startX = 600 - totalWidth / 2; // Center based on common view
     return {
-      x: centerX + radius * Math.cos(angle),
-      y: centerY + radius * Math.sin(angle),
+      x: startX + index * spacing,
+      y: 50,
     };
   };
 
@@ -37,11 +38,11 @@ export const HomePage = () => {
     const newNodes: any[] = [];
     const newEdges: any[] = [];
 
-    // 1. Create Participant Nodes in a circular layout
+    // 1. Create Participant Nodes in a top row
     if (data.participants) {
       const count = data.participants.length;
       data.participants.forEach((name, index) => {
-        const pos = arrangeParticipantsCircularly(count, index);
+        const pos = arrangeParticipantsInRow(count, index);
         newNodes.push({
           id: `person-${name}`,
           type: 'participant',
@@ -51,8 +52,13 @@ export const HomePage = () => {
       });
     }
 
-    // 2. Create Decision Nodes in a grid below participants
+    // 2. Create Decision Nodes at the bottom
     if (data.decisions) {
+      const count = data.decisions.length;
+      const spacing = 340;
+      const totalWidth = Math.min(3, count) * spacing;
+      const startX = 400 - totalWidth / 2;
+
       data.decisions.forEach((dec, index) => {
         const id = `decision-${index}`;
         newNodes.push({
@@ -64,8 +70,8 @@ export const HomePage = () => {
             participants: dec.participants || [],
           },
           position: {
-            x: 200 + (index % 3) * 320,
-            y: 450 + Math.floor(index / 3) * 220,
+            x: startX + (index % 3) * spacing,
+            y: 500 + Math.floor(index / 3) * 250,
           },
         });
 
@@ -73,7 +79,6 @@ export const HomePage = () => {
         if (dec.participants) {
           dec.participants.forEach((pName) => {
             const sourceId = `person-${pName}`;
-            // Only create edge if participant node exists
             if (data.participants.includes(pName)) {
               newEdges.push({
                 id: `edge-${id}-${sourceId}`,
@@ -131,7 +136,7 @@ export const HomePage = () => {
   };
 
   return (
-    <main className="flex h-screen w-full bg-slate-950 text-slate-200 overflow-hidden">
+    <div className="flex h-screen w-full bg-slate-950 text-slate-200 overflow-hidden">
       <Sidebar
         selectedNode={selectedNode}
         nodesLength={nodes.length}
@@ -141,16 +146,21 @@ export const HomePage = () => {
         onAnalyze={handleAnalyze}
         onReset={handleReset}
       />
-      <DecisionGraph
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        onNodeClick={onNodeClick}
-        participantCount={participants.length}
-        decisionCount={decisionCount}
-      />
-    </main>
+      <div className="flex flex-col flex-1 overflow-hidden">
+        <Navbar />
+        <ReactFlowProvider>
+          <DecisionGraph
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            onNodeClick={onNodeClick}
+            participantCount={participants.length}
+            decisionCount={decisionCount}
+          />
+        </ReactFlowProvider>
+      </div>
+    </div>
   );
 };

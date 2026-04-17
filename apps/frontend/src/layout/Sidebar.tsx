@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { Network, Info, FileText, Users } from 'lucide-react';
+import { Icon } from '@synapse/ui';
 import { UploadTranscriptForm } from '@/components/UploadTranscriptForm';
 
 interface SidebarProps {
@@ -60,7 +60,7 @@ export const Sidebar = ({
   return (
     <div className="w-80 bg-slate-900 border-r border-slate-800 p-6 flex flex-col gap-6 overflow-y-auto">
       <div className="flex items-center gap-2 mb-2">
-        <Network className="text-sky-400 w-8 h-8" />
+        <Icon type="hub" className="text-sky-400 !text-[32px]" />
         <h1 className="text-xl font-bold bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">
           Synapse AI
         </h1>
@@ -69,7 +69,7 @@ export const Sidebar = ({
       {selectedNode ? (
         <div className="animate-in fade-in slide-in-from-right-4 duration-300">
           <h2 className="text-lg font-semibold text-sky-400 mb-4 flex items-center gap-2">
-            <Info className="w-5 h-5" /> {selectedNode.type === 'participant' ? 'Participant' : 'Decision Context'}
+            <Icon type="info" className="!text-[20px]" /> {selectedNode.type === 'participant' ? 'Participant' : 'Decision Context'}
           </h2>
           <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700/50 mb-6">
             <p className="text-sm text-slate-400 mb-1">
@@ -81,7 +81,7 @@ export const Sidebar = ({
           {selectedNode.data.rationale && (
             <>
               <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-tight mt-4 mb-3 flex items-center gap-2">
-                <FileText className="w-4 h-4" /> Rationale
+                <Icon type="description" className="!text-[16px]" /> Rationale
               </h3>
               <div className="bg-slate-800/30 p-4 rounded-lg border border-slate-700/30 text-xs italic text-slate-400 leading-relaxed">
                 {selectedNode.data.rationale}
@@ -92,7 +92,7 @@ export const Sidebar = ({
           {selectedNode.data.participants && selectedNode.data.participants.length > 0 && (
             <>
               <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-tight mt-6 mb-3 flex items-center gap-2">
-                <Users className="w-4 h-4" /> Involved Participants
+                <Icon type="group" className="!text-[16px]" /> Involved Participants
               </h3>
               <div className="space-y-3">
                 {selectedNode.data.participants.map((name: string, i: number) => (
@@ -114,7 +114,7 @@ export const Sidebar = ({
         </div>
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center text-center opacity-40 px-4">
-          <Network className="w-12 h-12 mb-4 text-slate-500" />
+          <Icon type="hub" className="mb-4 text-slate-500 !text-[48px]" />
           <p className="text-sm">
             {nodesLength === 0
               ? 'Upload a meeting transcript to identify participants and extract decisions.'
@@ -126,7 +126,7 @@ export const Sidebar = ({
       {participants.length > 0 && (
         <div className="bg-slate-800/50 rounded-2xl p-4 border border-slate-700/50">
           <h3 className="text-sm font-semibold text-emerald-400 mb-3 flex items-center gap-2">
-            <Users className="w-4 h-4" /> Participants ({participants.length})
+            <Icon type="group" className="!text-[16px]" /> Participants ({participants.length})
           </h3>
           <div className="space-y-2">
             {participants.map((name, i) => (
@@ -146,7 +146,7 @@ export const Sidebar = ({
       {transcript.length > 0 && (
         <div className="bg-slate-900 border border-slate-700/50 rounded-lg p-3 space-y-1">
           <p className="text-[10px] text-sky-400 font-bold flex items-center gap-1 mb-2">
-            <FileText className="w-3 h-3" /> TRANSCRIPT ({transcript.length} lines)
+            <Icon type="description" className="!text-[12px]" /> TRANSCRIPT ({transcript.length} lines)
           </p>
           <div
             className="max-h-48 overflow-y-auto space-y-1.5 pr-1"

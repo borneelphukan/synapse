@@ -31,7 +31,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           className={
             hideLabel
               ? "sr-only"
-              : "text-gray-100 font-medium text-sm group-focus-within/input:text-gray-100"
+              : "text-slate-400 font-medium text-[10px] uppercase tracking-wider group-focus-within/input:text-sky-400 transition-colors"
           }
         >
           {label}
@@ -39,16 +39,12 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         </span>
 
         <div
-          className={`flex flex-row gap-2 items-start py-2 px-3 rounded-md border-1 border-gray-400 shadow-xs shadow-black/20 transition-colors ${
-            error ? "border-red-200" : ""
-          } group-focus-within/input:!ring-[2px] group-focus-within/input:!ring-offset-2 ${
-            error
-              ? "group-focus-within/input:!ring-red-200"
-              : "group-focus-within/input:!ring-orange-500"
+          className={`flex flex-row gap-2 items-start p-0 rounded-lg border border-slate-700 bg-slate-900 overflow-hidden transition-colors focus-within:border-sky-500 ${
+            error ? "border-red-400" : ""
           } ${className || ""}`}
         >
           <textarea
-            className="border-none bg-transparent px-0.5 w-full placeholder-gray-100 focus:outline-none focus:placeholder-gray-100 text-sm min-h-16 field-sizing-content"
+            className={`w-full bg-transparent px-3 py-2 text-xs focus:outline-none transition-colors resize-none placeholder-slate-500 text-slate-200 min-h-[120px] scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent`}
             id={id}
             name={id}
             ref={ref}
@@ -57,7 +53,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           />
         </div>
         {hint && (
-          <span className="text-gray-100 font-normal text-xs">
+          <span className="text-slate-500 font-normal text-[10px]">
             {hint}
           </span>
         )}
