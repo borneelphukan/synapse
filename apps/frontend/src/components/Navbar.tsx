@@ -4,13 +4,14 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
-import { Icon } from '@synapse/ui';
+import { Badge, Icon } from '@synapse/ui';
 import { api } from '@/shared/api';
 
 interface UserData {
   firstName: string;
   lastName: string;
   email: string;
+  isPaid: boolean;
 }
 
 export const Navbar = () => {
@@ -31,13 +32,8 @@ export const Navbar = () => {
 
   return (
     <nav className="w-full h-16 border-b border-slate-800 bg-slate-900 flex items-center justify-between px-6 shrink-0 relative z-50">
-      {/* Left: Branding */}
-      <div className="flex items-center gap-2">
-         <div className="w-8 h-8 rounded-lg bg-sky-500 flex items-center justify-center">
-           <Icon type="hub" className="text-white !text-[20px]" />
-         </div>
-         <span className="font-bold text-slate-100 tracking-tight text-lg">Synapse <span className="text-sky-500 font-black">AI</span></span>
-      </div>
+      {/* Left: Empty space (branding removed) */}
+      <div />
       
       {/* Right: Actions */}
       <div className="flex items-center gap-4">
@@ -78,12 +74,12 @@ export const Navbar = () => {
                           {user?.email || '...'}
                         </p>
                       </div>
-                      <button className="p-1.5 rounded-lg text-slate-500 hover:text-slate-100 hover:bg-slate-800 transition-all">
+                      <button className="p-1.5 rounded-lg text-slate-500 hover:text-slate-400 transition-all">
                         <Icon type="settings" className="!text-[18px]" />
                       </button>
                     </div>
                     
-                    <div className="flex items-center gap-3 mt-5">
+                    <div className="flex items-center justify-between mt-5">
                       {/* Theme Toggle Switch (Moved to left) */}
                       <button 
                         onClick={(e) => {
@@ -96,7 +92,12 @@ export const Navbar = () => {
                           <Icon type={theme === 'dark' ? 'dark_mode' : 'light_mode'} className="!text-[10px] text-white" />
                         </div>
                       </button>
-                      <span className="text-xs font-bold text-emerald-400">Appearance</span>
+
+                      {user && !user.isPaid && (
+                        <Link href="/pricing" className="hover:opacity-80 transition-opacity">
+                          <Badge label="Upgrade" type="orange" size="sm" className="font-black" />
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </div>

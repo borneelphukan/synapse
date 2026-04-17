@@ -1,15 +1,12 @@
-'use client';
-
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { Icon } from '@synapse/ui';
 import { api } from '@/shared/api';
 
 export const ResetPasswordPage = () => {
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const token = searchParams?.get('token') || '';
+  const { token } = router.query;
 
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -35,7 +32,7 @@ export const ResetPasswordPage = () => {
     }
     setLoading(true);
     try {
-      await api.resetPassword({ token, password });
+      await api.resetPassword({ token: token as string, password });
       setSuccess(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to reset password.');
@@ -160,3 +157,5 @@ export const ResetPasswordPage = () => {
     </div>
   );
 };
+
+export default ResetPasswordPage;

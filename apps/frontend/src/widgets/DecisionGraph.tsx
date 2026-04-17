@@ -125,7 +125,7 @@ export const DecisionGraph = ({
 
       {/* Legend */}
       {nodes.length > 0 && (
-        <div className="absolute bottom-4 right-4 bg-slate-900/80 backdrop-blur-md px-4 py-3 rounded-xl border border-slate-700/50 shadow-2xl text-xs space-y-2">
+        <div className="absolute bottom-4 right-4 bg-slate-800 backdrop-blur-md px-4 py-3 rounded-xl shadow-2xl text-xs space-y-2">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full" style={{ background: 'linear-gradient(135deg, #0ea5e9, #6366f1)' }}></div>
             <span className="text-slate-400">Participant</span>

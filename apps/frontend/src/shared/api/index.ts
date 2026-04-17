@@ -72,5 +72,6 @@ export const api = {
     lastName: string;
     email: string;
     company?: string;
+    isPaid: boolean;
   }> => request('/auth/me'),
 };

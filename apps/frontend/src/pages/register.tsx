@@ -1,8 +1,6 @@
-'use client';
-
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { Icon } from '@synapse/ui';
 import { api } from '@/shared/api';
 import { useAuth } from '@/context/AuthContext';
@@ -197,3 +195,5 @@ export const RegisterPage = () => {
     </div>
   );
 };
+
+export default RegisterPage;

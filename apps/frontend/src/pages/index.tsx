@@ -1,6 +1,4 @@
-'use client';
-
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { 
   addEdge, 
   useNodesState, 
@@ -14,6 +12,16 @@ import { Sidebar } from '@/layout/Sidebar';
 import { Navbar } from '@/components/Navbar';
 import { DecisionGraph } from '@/widgets/DecisionGraph';
 import { api, type AnalysisResult } from '@/shared/api';
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogDescription, 
+  DialogFooter,
+  DialogClose,
+  Icon
+} from '@synapse/ui';
 
 export const HomePage = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -23,6 +31,21 @@ export const HomePage = () => {
   const [transcript, setTranscript] = useState<string[]>([]);
   const [participants, setParticipants] = useState<string[]>([]);
   const [decisionCount, setDecisionCount] = useState(0);
+  const [showResetDialog, setShowResetDialog] = useState(false);
+
+  // Catch browser reload/close
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (nodes.length > 0) {
+        e.preventDefault();
+        e.returnValue = ''; // Required for most browsers
+        return '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [nodes.length]);
 
   const arrangeParticipantsInRow = (count: number, index: number) => {
     const spacing = 180;
@@ -116,6 +139,21 @@ export const HomePage = () => {
     }
   };
 
+  // Catch keyboard reload shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (nodes.length > 0) {
+        if ((e.key === 'r' && (e.metaKey || e.ctrlKey)) || e.key === 'F5') {
+          e.preventDefault();
+          setShowResetDialog(true);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [nodes.length]);
+
   const handleReset = () => {
     setNodes([]);
     setEdges([]);
@@ -124,6 +162,11 @@ export const HomePage = () => {
     setTranscript([]);
     setDecisionCount(0);
     setStatus('idle');
+    setShowResetDialog(false);
+  };
+
+  const handleManualReload = () => {
+    window.location.reload();
   };
 
   const onConnect = useCallback(
@@ -144,7 +187,7 @@ export const HomePage = () => {
         transcript={transcript}
         status={status}
         onAnalyze={handleAnalyze}
-        onReset={handleReset}
+        onReset={() => nodes.length > 0 ? setShowResetDialog(true) : handleReset()}
       />
       <div className="flex flex-col flex-1 overflow-hidden">
         <Navbar />
@@ -161,6 +204,35 @@ export const HomePage = () => {
           />
         </ReactFlowProvider>
       </div>
+
+      <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
+        <DialogContent className="max-w-md border-slate-800 bg-slate-900 text-slate-100">
+          <DialogHeader>
+            <div className="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center mb-4">
+              <Icon type="warning" className="text-amber-500 !text-[24px]" />
+            </div>
+            <DialogTitle className="text-slate-100 text-xl">Unsaved Graph Present</DialogTitle>
+            <DialogDescription className="text-slate-400 mt-2">
+              Do you really want to Reload? You will lose the graph you have created.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="bg-slate-900/50 border-slate-800 gap-3">
+            <DialogClose>
+              <button className="px-4 py-2 text-sm font-semibold text-slate-400 hover:text-slate-200 transition-colors">
+                Cancel
+              </button>
+            </DialogClose>
+            <button
+              onClick={handleManualReload}
+              className="px-6 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-sm font-bold transition-all shadow-lg shadow-amber-900/20 flex items-center gap-2"
+            >
+              <Icon type="refresh" className="!text-[16px]" /> Ok, Reload
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
+
+export default HomePage;

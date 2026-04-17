@@ -124,7 +124,7 @@ export const Sidebar = ({
       )}
 
       {participants.length > 0 && (
-        <div className="bg-slate-800/50 rounded-2xl p-4 border border-slate-700/50">
+        <div className="rounded-2xl p-4 border border-slate-300">
           <h3 className="text-sm font-semibold text-emerald-400 mb-3 flex items-center gap-2">
             <Icon type="group" className="!text-[16px]" /> Participants ({participants.length})
           </h3>
@@ -144,7 +144,7 @@ export const Sidebar = ({
 
       {/* Transcript viewer — shown after analysis */}
       {transcript.length > 0 && (
-        <div className="bg-slate-900 border border-slate-700/50 rounded-lg p-3 space-y-1">
+        <div className="bg-slate-900 border border-slate-300 rounded-lg p-3 space-y-1">
           <p className="text-[10px] text-sky-400 font-bold flex items-center gap-1 mb-2">
             <Icon type="description" className="!text-[12px]" /> TRANSCRIPT ({transcript.length} lines)
           </p>

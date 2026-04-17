@@ -1,7 +1,5 @@
-'use client';
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/router';
 
 type Theme = 'dark' | 'light';
 
@@ -14,7 +12,8 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<Theme>('dark');
-  const pathname = usePathname();
+  const router = useRouter();
+  const { pathname } = router;
 
   useEffect(() => {
     const isAuthPage = ['/login', '/register', '/forgot-password', '/reset-password'].includes(pathname || '');
