@@ -39,7 +39,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         </span>
 
         <div
-          className={`flex flex-row gap-2 items-start p-0 rounded-lg border border-gray-300 overflow-hidden transition-colors focus-within:border-sky-500 ${
+          className={`flex flex-row gap-2 items-start p-0 rounded-lg border border-slate-300 overflow-hidden transition-colors focus-within:border-sky-500 ${
             error ? "border-red-400" : ""
           } ${className || ""}`}
         >

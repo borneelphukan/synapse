@@ -99,7 +99,7 @@ export const DecisionGraph = ({
       
       {/* Controls & Export area */}
       {nodes.length > 0 && (
-        <div className="absolute top-4 right-4 flex items-center gap-2">
+        <div className="absolute top-4 right-4 flex flex-col sm:flex-row items-end sm:items-center gap-2">
           <button
             onClick={onDownloadClick}
             className="bg-slate-900/80 backdrop-blur-md px-3 py-2 rounded-xl border border-slate-700/50 shadow-2xl flex items-center gap-2 text-xs text-sky-400 hover:bg-slate-800 transition-all hover:border-sky-500/50"

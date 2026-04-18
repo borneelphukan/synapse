@@ -18,9 +18,18 @@ model User {
   passwordHash        String
   company             String?
   isPaid              Boolean              @default(false)
+  plan                PlanType             @default(FREE)
+  analysisCount       Int                  @default(0)
+  lastAnalysisDate    DateTime?
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
   passwordResetTokens PasswordResetToken[]
+}
+
+enum PlanType {
+  FREE
+  BASIC
+  PRO
 }
 
 model PasswordResetToken {

@@ -73,5 +73,18 @@ export const api = {
     email: string;
     company?: string;
     isPaid: boolean;
+    plan: string;
   }> => request('/auth/me'),
+
+  createCheckoutSession: async (plan: 'BASIC' | 'PRO'): Promise<{ url: string }> =>
+    request('/billing/create-checkout-session', {
+      method: 'POST',
+      body: JSON.stringify({ plan }),
+    }),
+
+  confirmPayment: async (sessionId: string): Promise<{ success: boolean; plan?: string }> =>
+    request('/billing/confirm-payment', {
+      method: 'POST',
+      body: JSON.stringify({ sessionId }),
+    }),
 };

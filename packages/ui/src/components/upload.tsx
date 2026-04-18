@@ -54,7 +54,7 @@ const Upload = ({
           {/* File upload area */}
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-sky-500 dark:hover:border-sky-500 hover:bg-sky-500/5 dark:hover:bg-sky-500/10 rounded-2xl p-8 cursor-pointer transition-all group text-center bg-slate-50/50 dark:bg-slate-800/20"
+            className="border border-dashed border-slate-300 dark:border-slate-700 hover:border-sky-500 dark:hover:border-sky-500 hover:bg-sky-500/5 dark:hover:bg-sky-500/10 rounded-2xl p-8 cursor-pointer transition-all group text-center bg-slate-50/50 dark:bg-slate-800/20"
           >
             <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300">
               <Icon type="upload" className="!text-[24px] text-slate-400 dark:text-slate-500 group-hover:text-sky-500 transition-colors hover:cursor-pointer" />

@@ -12,9 +12,14 @@ interface UserData {
   lastName: string;
   email: string;
   isPaid: boolean;
+  plan: string;
 }
 
-export const Navbar = () => {
+interface NavbarProps {
+  onMenuClick?: () => void;
+}
+
+export const Navbar = ({ onMenuClick }: NavbarProps) => {
   const { logout, isAuthenticated } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -32,8 +37,15 @@ export const Navbar = () => {
 
   return (
     <nav className="w-full h-16 border-b border-slate-800 bg-slate-900 flex items-center justify-between px-6 shrink-0 relative z-50">
-      {/* Left: Empty space (branding removed) */}
-      <div />
+      {/* Left: Mobile Menu Toggle */}
+      <div className="flex items-center">
+        <button 
+          onClick={onMenuClick}
+          className="lg:hidden p-2 -ml-2 mr-2 text-slate-400 hover:text-white transition-colors"
+        >
+          <Icon type="menu" className="!text-[24px]" />
+        </button>
+      </div>
       
       {/* Right: Actions */}
       <div className="flex items-center gap-4">
@@ -93,7 +105,7 @@ export const Navbar = () => {
                         </div>
                       </button>
 
-                      {user && !user.isPaid && (
+                      {user && user.plan !== 'PRO' && (
                         <Link href="/pricing" className="hover:opacity-80 transition-opacity">
                           <Badge label="Upgrade" type="orange" size="sm" className="font-black" />
                         </Link>
@@ -110,7 +122,7 @@ export const Navbar = () => {
                   >
                      <Icon type="logout" className="!text-[16px]" /> Sign Out
                   </button>
-                  <p className="text-[10px] text-slate-600">v1.0.4</p>
+                  <p className="text-[10px] text-black dark:text-white">v1.0.4</p>
                 </div>
               </div>
             </>

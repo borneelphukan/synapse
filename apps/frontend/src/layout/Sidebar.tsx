@@ -5,6 +5,8 @@ import { Icon } from '@synapse/ui';
 import { UploadTranscriptForm } from '@/components/UploadTranscriptForm';
 
 interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
   selectedNode: any;
   nodesLength: number;
   participants: string[];
@@ -15,6 +17,8 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({
+  isOpen,
+  onClose,
   selectedNode,
   nodesLength,
   participants,
@@ -58,13 +62,30 @@ export const Sidebar = ({
   };
 
   return (
-    <div className="w-80 bg-slate-900 border-r border-slate-800 p-6 flex flex-col gap-6 overflow-y-auto">
-      <div className="flex items-center gap-2 mb-2">
-        <Icon type="hub" className="text-sky-400 !text-[32px]" />
-        <h1 className="text-xl font-bold bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">
-          Synapse AI
-        </h1>
-      </div>
+    <>
+      {/* Mobile backdrop */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 lg:hidden" 
+          onClick={onClose}
+        />
+      )}
+
+      <div className={`fixed inset-y-0 left-0 z-50 w-80 bg-slate-900 border-r border-slate-800 p-6 flex flex-col gap-6 overflow-y-auto transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <Icon type="hub" className="text-sky-400 !text-[32px]" />
+            <h1 className="text-xl font-bold bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">
+              Synapse AI
+            </h1>
+          </div>
+          <button 
+            className="lg:hidden text-slate-400 hover:text-white transition-colors"
+            onClick={onClose}
+          >
+            <Icon type="close" className="!text-[24px]" />
+          </button>
+        </div>
 
       {selectedNode ? (
         <div className="animate-in fade-in slide-in-from-right-4 duration-300">
@@ -184,6 +205,7 @@ export const Sidebar = ({
           onReset={onReset}
         />
       </div>
-    </div>
+      </div>
+    </>
   );
 };

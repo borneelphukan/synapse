@@ -7,6 +7,7 @@ import { DecisionModule } from './decision/decision.module';
 import { ExtractionModule } from './extraction/extraction.module';
 import { IngestionModule } from './ingestion/ingestion.module';
 import { AuthModule } from './auth/auth.module';
+import { BillingModule } from './billing/billing.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuthModule } from './auth/auth.module';
     DecisionModule,
     ExtractionModule,
     IngestionModule,
+    BillingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

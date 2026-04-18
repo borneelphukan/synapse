@@ -22,8 +22,11 @@ import {
   DialogClose,
   Icon
 } from '@synapse/ui';
+import { useRouter } from 'next/router';
 
 export const HomePage = () => {
+  const router = useRouter();
+
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedNode, setSelectedNode] = useState<any>(null);
@@ -32,6 +35,7 @@ export const HomePage = () => {
   const [participants, setParticipants] = useState<string[]>([]);
   const [decisionCount, setDecisionCount] = useState(0);
   const [showResetDialog, setShowResetDialog] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Catch browser reload/close
   useEffect(() => {
@@ -46,6 +50,25 @@ export const HomePage = () => {
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [nodes.length]);
+
+  // Handle Stripe Success Callback
+  useEffect(() => {
+    if (router.isReady && router.query.success === 'true' && router.query.session_id) {
+      const confirmPayment = async () => {
+        try {
+          const result = await api.confirmPayment(router.query.session_id as string);
+          if (result.success) {
+            alert(`Subscription successful! You are now on the ${result.plan} plan.`);
+            // Refresh to update user context across all components
+            window.location.href = '/';
+          }
+        } catch (error) {
+          console.error('Failed to confirm payment:', error);
+        }
+      };
+      confirmPayment();
+    }
+  }, [router.isReady, router.query]);
 
   const arrangeParticipantsInRow = (count: number, index: number) => {
     const spacing = 180;
@@ -179,8 +202,10 @@ export const HomePage = () => {
   };
 
   return (
-    <div className="flex h-screen w-full bg-slate-950 text-slate-200 overflow-hidden">
+    <div className="flex h-screen w-full bg-slate-950 text-slate-200 overflow-hidden relative">
       <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
         selectedNode={selectedNode}
         nodesLength={nodes.length}
         participants={participants}
@@ -190,7 +215,7 @@ export const HomePage = () => {
         onReset={() => nodes.length > 0 ? setShowResetDialog(true) : handleReset()}
       />
       <div className="flex flex-col flex-1 overflow-hidden">
-        <Navbar />
+        <Navbar onMenuClick={() => setIsSidebarOpen(true)} />
         <ReactFlowProvider>
           <DecisionGraph
             nodes={nodes}
